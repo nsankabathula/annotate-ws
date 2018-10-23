@@ -9,7 +9,7 @@ const app = express();
 const dbUtils = require('./src/app/db');
 appDb = dbUtils.db(env, 'app')
 
-dbUtils.import_data(appDb)
+//dbUtils.import_data(appDb)
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

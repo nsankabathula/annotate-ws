@@ -8,6 +8,13 @@ module.exports = function (app, controller) {
         controller.findAll(req, res);
     });
 
+    app.get(defaultRoute + ":id/", (req, res) => {
+        controller.findOne(req, res);
+    });
+
+    app.post(defaultRoute, (req, res) => {
+        controller.create(req, res);
+    });
 
 
 

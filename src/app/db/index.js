@@ -36,9 +36,9 @@ function import_csv_data(appDb, type, label, file) {
 }
 
 
-meta_db = (env, db) => {
+db = (env, name) => {
     //console.log(env, db)
-    config = env[db];
+    config = env[name];
     console.log(config)
     const sqldb = new sqlite3.Database(config.uri, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
         if (err) {
@@ -54,18 +54,13 @@ meta_db = (env, db) => {
     if (sqldb) {
         sqldb.serialize(() => {
             sqldb
-                .run('CREATE TABLE IF NOT EXISTS "training_meta" (`db` TEXT, `path` TEXT,  `label` TEXT, `type` TEXT, `file` BLOB, `id` INTEGER PRIMARY KEY AUTOINCREMENT )')
-                .run('CREATE TABLE IF NOT EXISTS "training_metrics" ( `metaId` INTEGER, `status` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT, FOREIGN KEY(`metaId`) REFERENCES `training_meta`(`id`) )')
+                .run('CREATE TABLE IF NOT EXISTS "dataset_meta" (`tableName` TEXT, `name` TEXT, `purpose` TEXT, `type` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT )')
+                .run('CREATE TABLE IF NOT EXISTS "dataset_metrics" ( `metaId` INTEGER, `status` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT, FOREIGN KEY(`metaId`) REFERENCES `dataset_meta`(`id`) )')
         })
     }
     return sqldb
 }
 
 module.exports = {
-
-    db: meta_db,
-    import_data: (appDb, name, label, file, fileType = "csv") => {
-        import_csv_data(appDb, "NER", "PERSON")
-    }
-
+    db: db
 };

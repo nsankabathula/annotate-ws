@@ -1,11 +1,15 @@
-const MetaDataRoutes = require('./metaDataRoutes');
+const MetaRoute = require('./metaRoute');
+const DataSetRoute = require('./dataSetRoutes')
 
 
 const CommonDao = require('../common/commonDao');
 const CommonController = require('../common/commonController');
 
-const MetaDao = require('../dao/metaDao')
+const DataSetMetaDao = require('../dao/dataSetMetaDao')
 const MetaController = require('../controller/metaController')
+
+const DataSetDao = require("../dao/dataSetDao")
+const DataSetController = require("../controller/dataSetController")
 
 
 
@@ -14,11 +18,13 @@ const MetaController = require('../controller/metaController')
 
 module.exports = function (app, config) {
 
-    commonDao = new CommonDao(config.db);
-    commonController = new CommonController();
+    const commonDao = new CommonDao(config.db);
+    const commonController = new CommonController();
 
-    metaDao = new MetaDao(commonDao)
-    MetaDataRoutes(app, new MetaController(metaDao, commonController));
+
+    MetaRoute(app, new MetaController(new DataSetMetaDao(commonDao), commonController));
+
+    DataSetRoute(app, new DataSetController(new DataSetDao(commonDao), commonController));
 
 
 };
